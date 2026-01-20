@@ -228,7 +228,7 @@
             box-shadow: 0 4px 10px rgba(147, 118, 224, 0.3);
         }
 
-        /* 詳細情報カード（料金削除に伴いデザイン調整） */
+        /* 詳細情報カード */
         .menu-detail-card {
             background-color: var(--primary-light);
             border-radius: 16px;
@@ -253,7 +253,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px; /* 下部マージン調整 */
+            margin-bottom: 5px; 
             font-size: 14px;
         }
 
@@ -272,11 +272,11 @@
             color: var(--text-main);
         }
 
-/* ハイライト（メニュー名） */
+        /* ハイライト（メニュー名） */
         .highlight-background {
             text-align: center;
             margin-bottom: 15px;
-            margin-top: 20px; /* ★ここを追加しました */
+            margin-top: 20px;
             font-weight: bold;
             color: var(--primary-dark);
             font-size: 15px;
@@ -355,28 +355,35 @@
             border-top: 1px solid #f9f9f9;
             cursor: pointer;
             position: relative;
+            z-index: 1; /* コンテンツを前面に */
         }
 
-        /* 選択時のデザイン */
+        /* ▼▼▼ 選択時のデザイン（ここを変更しました） ▼▼▼ */
         .calendar td.selected {
             background-color: transparent !important;
-            color: var(--primary-color) !important;
+            color: #ffffff !important; /* 文字を白く */
             font-weight: bold;
         }
         
+        /* 選択時の背景（塗りつぶし角丸四角） */
         .calendar td.selected::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary-light);
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            z-index: -1;
-            box-sizing: border-box;
+            width: 85%; /* セルいっぱいに広げる */
+            height: 85%;
+            background-color: var(--primary-color); /* 塗りつぶし */
+            border-radius: 8px; /* 角丸 */
+            z-index: -1; /* 文字の後ろに配置 */
+            box-shadow: 0 4px 10px rgba(147, 118, 224, 0.4); /* 浮き出る影 */
+            animation: popIn 0.2s ease-out; /* ポップなアニメーション */
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
         
         .available { color: var(--primary-color); font-weight: bold; }
@@ -706,7 +713,7 @@
 
             const selectedDateText = selectedFullDate ? `・<span style="color:var(--primary-color);"><strong>希望日時</strong></span>：${selectedFullDate}` : '・日時が未選択です';
 
-            // ▼▼▼ 修正箇所：所要時間と合計金額を削除 ▼▼▼
+            // 所要時間と合計金額を削除
             document.getElementById('displayInfo').innerHTML = `
                 <div style="font-size:14px; line-height:1.8; color:#555;">
                     <p>・<span style="color:var(--primary-color);"><strong>お名前</strong></span>：${name}</p>
@@ -724,9 +731,8 @@
         document.querySelectorAll('.visit-buttons button').forEach(button => button.addEventListener('click', updateDisplayInfo));
         document.querySelectorAll('.symptoms button').forEach(button => button.addEventListener('click', updateDisplayInfo));
 
-        // ▼▼▼ 修正箇所：料金項目を削除したカード生成関数 ▼▼▼
+        // 料金項目を削除したカード生成関数
         function createDetailCard(time, price, initialFee, note, isInitialFee = true) {
-            // price等は使用しない
             return `
             <div class="menu-detail-card">
                 <div class="detail-row">
@@ -759,7 +765,6 @@
 
             const treatmentText = document.getElementById('treatment-text');
             
-            // 隠れているinfo-textから情報を取得してカードを生成する処理
             let html = '';
             
             if (button.classList.contains('active')) {
